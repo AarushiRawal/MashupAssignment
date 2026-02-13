@@ -4,10 +4,6 @@ import yt_dlp
 from moviepy.editor import VideoFileClip
 from pydub import AudioSegment
 
-# -------------------------
-# Check Command Line Inputs
-# -------------------------
-
 if len(sys.argv) != 5:
     print("Usage: python <program.py> <SingerName> <NumberOfVideos> <AudioDuration> <OutputFileName>")
     sys.exit(1)
@@ -31,17 +27,9 @@ if duration <= 20:
     print("Duration must be greater than 20 seconds")
     sys.exit(1)
 
-# -------------------------
-# Create Folders
-# -------------------------
-
 os.makedirs("videos", exist_ok=True)
 os.makedirs("audios", exist_ok=True)
 os.makedirs("trimmed", exist_ok=True)
-
-# -------------------------
-# Download Videos
-# -------------------------
 
 def download_videos():
     search_query = f"ytsearch{num_videos}:{singer} songs"
@@ -55,10 +43,6 @@ def download_videos():
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([search_query])
 
-# -------------------------
-# Convert to Audio
-# -------------------------
-
 def convert_to_audio():
     for file in os.listdir("videos"):
         if file.endswith(".mp4"):
@@ -68,10 +52,6 @@ def convert_to_audio():
             video = VideoFileClip(video_path)
             video.audio.write_audiofile(audio_path)
             video.close()
-
-# -------------------------
-# Trim Audio
-# -------------------------
 
 def trim_audio():
     for file in os.listdir("audios"):
@@ -83,10 +63,6 @@ def trim_audio():
             trimmed = sound[:duration * 1000]
             trimmed.export(trimmed_path, format="mp3")
 
-# -------------------------
-# Merge Audio
-# -------------------------
-
 def merge_audio():
     combined = AudioSegment.empty()
 
@@ -97,10 +73,6 @@ def merge_audio():
             combined += sound
 
     combined.export(output_file, format="mp3")
-
-# -------------------------
-# Main Execution
-# -------------------------
 
 try:
     print("Downloading videos...")
