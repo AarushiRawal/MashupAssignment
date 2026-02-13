@@ -1,0 +1,7 @@
+__pycache__/
+videos/
+audios/
+trimmed/
+*.mp3
+*.zip
+file_list.txt
